@@ -22,7 +22,7 @@ clfGB_reduced = joblib.load('models/clfGB_final.pkl')
 compVars = pd.read_pickle('models/compVars.pkl').tolist()
 dat_ml = pd.read_pickle('dat_ml.pkl')
 y_pred = dat_ml.before1980
-X_pred = dat_ml.drop(['yrbuilt', 'before1980'], axis = 1)
+X_pred = dat_ml.drop(['yrbuilt', 'before1980'],  axis = 1)
 X_pred_reduced = dat_ml.filter(compVars, axis = 1)
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -32,7 +32,8 @@ X_train_reduced, X_test_reduced, y_train, y_test = train_test_split(
     X_pred_reduced, y_pred, test_size = .34, random_state = 76)  
 
 # %%
-#USing dalax
+#####USing dalax########
+#shap has some in dalax package
 # %%
 # Create explainer objects and show variable importance chart
 expReduced = dx.Explainer(clfGB_reduced, X_test_reduced, y_test)
@@ -58,7 +59,7 @@ sh = expReduced.predict_parts(X_test_reduced.iloc[0,:], type='shap', label="firs
 
 sh.plot(max_vars=12)
 
-#USING SHARP
+##############USING SHAP############
 # %%
 # Build shap explainer
 explainerShap = shap.Explainer(clfGB_reduced)
@@ -79,3 +80,37 @@ shap.plots.beeswarm(shap_values.abs, color="shap_red")
 # %%
 # combine the above charts
 shap.plots.heatmap(shap_values[0:1000],  max_display=13)
+
+
+#We can also use partial dependence plots
+# %%
+shap.plots.partial_dependence(
+    "numbaths", 
+    clfGB_reduced.predict,
+    X_test_reduced,
+    ice=False,
+    model_expected_value=True,
+    feature_expected_value=True)
+
+# %%
+shap.plots.partial_dependence(
+    "livearea", 
+    clfGB_reduced.predict,
+    X_test_reduced,
+    ice=False,
+    model_expected_value=True,
+    feature_expected_value=True, 
+    show=False)
+
+plt.xlim(xmin=0,xmax=15000)
+plt.show()
+
+###when my one stort set to yes my probablity being 1980 goes up 
+# #and drop belowe by the performance of the variables
+
+#beeplot- the seperation of the red and blue means to be able to predict when its high
+#shap below, lowers the probability,
+#attach garge that decrease the probabilty of it being a 1980 house
+#as condition got better could be a coufounding better
+#red is high in metrix value
+#scale tells how its impacting the value
