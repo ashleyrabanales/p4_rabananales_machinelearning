@@ -92,6 +92,28 @@ preds_bt <- bind_cols(
     truth = pull(dat_test, before1980)
   )
 
+preds_bt %>%
+    roc_curve(truth, estimate.pred_before)
+    autoplot() #automatically creates the chart
+
+preds_nb %>%
+    roc_curve(truth, estimate.pred_before)
+    autoplot() #automatically creates the chart
+
+preds_all <- bind_rows(
+        mutate(preds_nb, model = "Naive Bayes"),
+        mutate(preds_bt, model = "Boosted Tree"),
+        mutate(preds_logistic, model = "Logistic Regression")
+)
+
+preds_all %>%
+    group_by(model)%>%
+    metrics_calc(truth, estimate = .pred_class) %>%
+    pivot_wider(names_froms = .metric, values_from = .estimate)
+
+
+
+
 ##Now, we can evaluate our prediction performance.
 #conf_mat()
 #metrics()
