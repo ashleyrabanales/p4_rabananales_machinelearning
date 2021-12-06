@@ -109,3 +109,20 @@ dat_train %>% dplyr::slice(c(8, 13800))
 #Break Down Profile, on left is after and p=.581 and right is p=.283
 #dot line avg of prob
 # the probability of being a before and after 1980
+#waterfall plots- avg of the dataset and shift.
+#rig
+
+#Shap plot
+onehouse_before <- predict_parts(explainer_bt,
+    new_observation = select(dat_e, -before1980) %>%
+        dplyr::slice(13800), type = "shap")
+
+onehouse_after <- predict_parts(explainer_bt,
+    new_observation = select(dat_e, -before1980) %>%
+        dplyr::slice(8), type = "shap")
+
+plot(onehouse_after) + plot(onehouse_before)
+
+dat_train %>% dplyr::slice(c(8, 13800))
+#size of the green bar has a more impact on the left(after) affecting by the outcome of the variables(part of it..)
+#
