@@ -125,4 +125,4 @@ plot(onehouse_after) + plot(onehouse_before)
 
 dat_train %>% dplyr::slice(c(8, 13800))
 #size of the green bar has a more impact on the left(after) affecting by the outcome of the variables(part of it..)
-#
+
