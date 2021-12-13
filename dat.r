@@ -222,6 +222,7 @@ plot(performance_bt, performance_logistic)
 plot(performance_bt, performance_logistic, geom = "boxplot")
 #looking at the residual area from 0-1, to know the variety of it and the low on the variabjce,
 #low in the blue boxplot.
+
 ggsave(file ="reverse_cum.png",width=15, height=9) 
 plot(performance_bt, performance_logistic)
 dev.off()
