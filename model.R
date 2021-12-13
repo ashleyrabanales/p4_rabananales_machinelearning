@@ -91,6 +91,7 @@ preds_nb <- bind_cols(
     truth = pull(dat_test, before1980)
   )
 
+##extra
 preds_bt <- bind_cols(
     predict(bt_model, new_data = dat_test),
     predict(bt_model, dat_test, type = "prob"),
