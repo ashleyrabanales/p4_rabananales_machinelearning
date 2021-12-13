@@ -22,7 +22,7 @@ dat_test <- testing(dat_split)
 #before is now 0 and after is 1
 dat_exp <- mutate(dat_train, before1980 = as.integer(dat_train$before1980) - 1)
 
-head(dat_e$before1980)
+head(dat_exp$before1980)
 head(dat_train$before1980)
 
 #Model fit
@@ -82,10 +82,9 @@ plot(logistic_parts, bt_parts, max_vars = 10)
 #the best fit for it, boosted 
 
 logistic_parts <- model_parts(explainer_logistic, 
-    loss_function = loss_root_mean_square, type =
-    "difference")
+    loss_function = loss_root_mean_square, type = "difference")
 bt_parts <- model_parts(explainer_bt,
-    loss_function = loss_root_mean_square)
+    loss_function = loss_root_mean_square, type = "difference")
 
 plot(logistic_parts, bt_parts, max_vars = 10)
 #read the book
@@ -95,11 +94,11 @@ plot(logistic_parts, bt_parts, max_vars = 10)
 #DALEX: Explain score
 #library(patchwork)
 onehouse_before <- predict_parts(explainer_bt,
-    new_observation = select(dat_e, -before1980) %>%
+    new_observation = select(dat_exp, -before1980) %>%
         dplyr::slice(13800), type = "break_down")
 
 onehouse_after <- predict_parts(explainer_bt,
-    new_observation = select(dat_e, -before1980) %>%
+    new_observation = select(dat_exp, -before1980) %>%
         dplyr::slice(8), type = "break_down")
 
 plot(onehouse_after) + plot(onehouse_before)
@@ -114,15 +113,18 @@ dat_train %>% dplyr::slice(c(8, 13800))
 
 #Shap plot
 onehouse_before <- predict_parts(explainer_bt,
-    new_observation = select(dat_e, -before1980) %>%
+    new_observation = select(dat_exp, -before1980) %>%
         dplyr::slice(13800), type = "shap")
 
 onehouse_after <- predict_parts(explainer_bt,
-    new_observation = select(dat_e, -before1980) %>%
+    new_observation = select(dat_exp, -before1980) %>%
         dplyr::slice(8), type = "shap")
 
 plot(onehouse_after) + plot(onehouse_before)
 
-dat_train %>% dplyr::slice(c(8, 13800))
+profile_bt <- model_profile(explainer_bt)
+profile_explainer <- model_profile(explainer_logistic)
+
+plot(profile_bt, profile_explainer)
 #size of the green bar has a more impact on the left(after) affecting by the outcome of the variables(part of it..)
 
