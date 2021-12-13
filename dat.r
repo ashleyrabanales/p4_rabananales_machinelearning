@@ -256,3 +256,8 @@ ggsave(file="break_down.png",width=15, height=9)
 plot(onehouse_after) + plot(onehouse_before)
 dev.off()
 
+#Break Down Profile, on left is after and p=.581 and right is p=.283
+#dot line avg of prob
+# the probability of being a before and after 1980
+#waterfall plots- avg of the dataset and shift.
+#rig
